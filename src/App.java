@@ -41,6 +41,7 @@ public class App {
     static int codigo1(int[] vetor) {
         int resposta = 0;
         for (int i = 0; i < vetor.length; i += 2) {
+            operacoes++;
             resposta += vetor[i]%2;
         }
         return resposta;
@@ -56,6 +57,7 @@ public class App {
         for (int k = (vetor.length - 1); k > 0; k /= 2) {
             for (int i = 0; i <= k; i++) {
                 contador++;
+                operacoes++;
             }
 
         }
@@ -70,6 +72,7 @@ public class App {
         for (int i = 0; i < vetor.length - 1; i++) {
             int menor = i;
             for (int j = i + 1; j < vetor.length; j++) {
+                operacoes++;
                 if (vetor[j] < vetor[menor])
                     menor = j;
             }
@@ -85,8 +88,10 @@ public class App {
      * @return Um inteiro que significa...
      */
     static int codigo4(int n) {
-        if (n <= 2)
+        operacoes++;
+        if (n <= 2){
             return 1;
+        }
         else
             return codigo4(n - 1) + codigo4(n - 2);
     }
@@ -105,6 +110,49 @@ public class App {
         
     }
     public static void main(String[] args) {
-        
+        System.out.println("Iniciando testes de desempenho...");
+
+        // Algoritmo 1
+        System.out.println("\n== Algoritmo 1 ==");
+        for (int n : tamanhosTesteGrande) {
+            int[] v = gerarVetor(n);
+            operacoes = 0;
+            long t0 = System.nanoTime();
+            codigo1(v);
+            long t1 = System.nanoTime();
+            System.out.printf("codigo1 n=%d | ops=%d | tempo=%.3f ms%n", n, operacoes, (t1 - t0) * nanoToMilli);
+        }
+
+        // Algoritmo 2
+        System.out.println("\n== Algoritmo 2 ==");
+        for (int n : tamanhosTesteGrande) {
+            int[] v = gerarVetor(n);
+            operacoes = 0;
+            long t0 = System.nanoTime();
+            codigo2(v);
+            long t1 = System.nanoTime();
+            System.out.printf("codigo2 n=%d | ops=%d | tempo=%.3f ms%n", n, operacoes, (t1 - t0) * nanoToMilli);
+        }
+
+        // Algoritmo 3
+        System.out.println("\n== Algoritmo 3 ==");
+        for (int n : tamanhosTesteMedio) {
+            int[] v = gerarVetor(n);
+            operacoes = 0;
+            long t0 = System.nanoTime();
+            codigo3(v);
+            long t1 = System.nanoTime();
+            System.out.printf("codigo3 n=%d | ops=%d | tempo=%.3f ms%n", n, operacoes, (t1 - t0) * nanoToMilli);
+        }
+
+        // Algoritmo 4
+        System.out.println("\n== Algoritmo 4 ==");
+        for (int n : tamanhosTestePequeno) {
+            operacoes = 0;
+            long t0 = System.nanoTime();
+            codigo4(n);
+            long t1 = System.nanoTime();
+            System.out.printf("codigo4 n=%d | ops=%d | tempo=%.3f ms%n", n, operacoes, (t1 - t0) * nanoToMilli);
+        }
     }
 }
